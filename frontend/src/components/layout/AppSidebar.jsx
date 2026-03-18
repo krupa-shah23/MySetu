@@ -7,7 +7,11 @@ import {
   Calendar, 
   Activity,
   Settings,
-  LogOut
+  LogOut,
+  Network,
+  QrCode,
+  Sparkles,
+  Building2
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -21,6 +25,10 @@ const navItems = [
   { icon: Wallet, label: 'Wallet', path: '/wallet' },
   { icon: ShieldCheck, label: 'Consent', path: '/consent' },
   { icon: Calendar, label: 'Timeline', path: '/timeline' },
+  { icon: Network, label: 'Career Graph', path: '/career-graph' },
+  { icon: QrCode, label: 'QR Verify', path: '/qr-verify' },
+  { icon: Sparkles, label: 'AI Suggestions', path: '/ai-suggestions' },
+  { icon: Building2, label: 'Institution', path: '/institution' },
   { icon: Activity, label: 'Activity', path: '/activity' },
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];

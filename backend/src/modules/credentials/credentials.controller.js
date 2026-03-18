@@ -1,68 +1,81 @@
-import { Book, Briefcase, FileText, HeartPulse, GraduationCap, ShieldCheck } from 'lucide-react';
+const getCredentials = (req, res) => {
+  try {
+    const mockCredentials = [
+      {
+        id: "cred_001",
+        title: "Academic Transcript",
+        domain: "Education",
+        issuer: "University of Technology",
+        issuedDate: "2023-05-15",
+        expiryDate: null,
+        status: "Verified",
+        type: "AcademicTranscript"
+      },
+      {
+        id: "cred_002",
+        title: "Degree Certificate",
+        domain: "Education",
+        issuer: "University of Technology",
+        issuedDate: "2023-06-01",
+        expiryDate: null,
+        status: "Verified",
+        type: "DegreeCertificate"
+      },
+      {
+        id: "cred_003",
+        title: "Employment Letter",
+        domain: "Employment",
+        issuer: "Tech Solutions Inc.",
+        issuedDate: "2024-01-10",
+        expiryDate: "2025-01-10",
+        status: "Verified",
+        type: "EmploymentLetter"
+      },
+      {
+        id: "cred_004",
+        title: "Salary Slip",
+        domain: "Finance",
+        issuer: "Tech Solutions Inc.",
+        issuedDate: "2024-02-28",
+        expiryDate: null,
+        status: "Shared",
+        type: "SalarySlip"
+      },
+      {
+        id: "cred_005",
+        title: "Identity Proof",
+        domain: "Identity",
+        issuer: "National ID Authority",
+        issuedDate: "2020-08-12",
+        expiryDate: "2030-08-12",
+        status: "Verified",
+        type: "IdentityProof"
+      },
+      {
+        id: "cred_006",
+        title: "Medical History",
+        domain: "Healthcare",
+        issuer: "City General Hospital",
+        issuedDate: "2024-03-01",
+        expiryDate: null,
+        status: "Expiring Soon",
+        type: "MedicalHistory"
+      }
+    ];
 
-const mockCredentials = [
-  {
-    id: 'cred-1',
-    title: 'Academic Transcript',
-    domain: 'Education',
-    issuer: 'Stanford University',
-    issuedDate: '2022-06-15',
-    expiryDate: null,
-    status: 'Verified',
-    useCases: ['Higher Education', 'Background Check']
-  },
-  {
-    id: 'cred-2',
-    title: 'Degree Certificate',
-    domain: 'Education',
-    issuer: 'Stanford University',
-    issuedDate: '2022-06-30',
-    expiryDate: null,
-    status: 'Verified',
-    useCases: ['Employment', 'Immigration']
-  },
-  {
-    id: 'cred-3',
-    title: 'Employment Letter',
-    domain: 'Employment',
-    issuer: 'TechCorp Inc.',
-    issuedDate: '2023-01-10',
-    expiryDate: null,
-    status: 'Shared',
-    useCases: ['Loan Application', 'Visa']
-  },
-  {
-    id: 'cred-4',
-    title: 'Salary Slip',
-    domain: 'Finance',
-    issuer: 'TechCorp Inc.',
-    issuedDate: '2024-02-01',
-    expiryDate: null,
-    status: 'Verified',
-    useCases: ['Mortgage', 'Credit Card']
-  },
-  {
-    id: 'cred-5',
-    title: 'Identity Proof',
-    domain: 'Government',
-    issuer: 'Gov Authority',
-    issuedDate: '2019-05-12',
-    expiryDate: '2029-05-12',
-    status: 'Verified',
-    useCases: ['General Identity', 'Travel']
-  },
-  {
-    id: 'cred-6',
-    title: 'Medical History',
-    domain: 'Healthcare',
-    issuer: 'City General Hospital',
-    issuedDate: '2023-11-20',
-    expiryDate: null,
-    status: 'Expiring Soon',
-    useCases: ['Insurance', 'Specialist Transfer']
+    return res.status(200).json({
+      success: true,
+      data: mockCredentials
+    });
+  } catch (error) {
+    console.error("Error fetching credentials:", error);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching credentials"
+    });
   }
-];
+};
 
-exports.getCredentials = (req, res) => {
-  res.json({ success: true, count: mockCredentials.length, data: mockCredentials });
+module.exports = {
+  getCredentials
 };

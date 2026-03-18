@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldCheck, Calendar as CalendarIcon, Wallet, Lock, History, ChevronRight, User } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+import { ShieldCheck, Calendar as CalendarIcon, Wallet, Lock, History, ChevronRight, User, Network } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { dashboardData } from '../utils/mockData';
@@ -143,6 +144,27 @@ export default function Dashboard() {
                        </div>
                     </div>
                  </div>
+              </div>
+
+              {/* Career Graph Fast Access */}
+              <div className="relative bg-white/50 p-4 rounded-2xl border border-slate-100 shadow-sm mt-[-10px] mb-6">
+                 <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Identity Graph</h4>
+                 </div>
+                 <NavLink to="/career-graph" className="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-all group cursor-pointer">
+                    <div className="flex items-center gap-3">
+                       <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
+                          <Network className="w-4 h-4 text-indigo-500" />
+                       </div>
+                       <div>
+                          <h5 className="text-[13px] font-semibold text-slate-800 leading-tight">Career Graph Explorer</h5>
+                          <p className="text-[11px] font-medium text-slate-500 mt-0.5">Visualize your nodes and edges</p>
+                       </div>
+                    </div>
+                    <div className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-indigo-600 transition-colors">
+                       <ChevronRight className="w-3.5 h-3.5" />
+                    </div>
+                 </NavLink>
               </div>
 
               {/* Suggestions Planner Style */}

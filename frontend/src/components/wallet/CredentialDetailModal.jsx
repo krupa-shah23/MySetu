@@ -1,83 +1,76 @@
 import React from 'react';
-import { X, ShieldCheck, Share2, QrCode, Calendar, Lock } from 'lucide-react';
+import { X, Share2, QrCode, FileBadge } from 'lucide-react';
 
-export default function CredentialDetailModal({ credential, onClose }) {
-  if (!credential) return null;
+export default function CredentialDetailModal({ isOpen, onClose, credential }) {
+  if (!isOpen || !credential) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-      
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
-
+      
       {/* Modal */}
-      <div className="relative w-full max-w-md bg-white/90 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 animate-in zoom-in-95 duration-200">
+      <div className="relative bg-white/90 backdrop-blur-3xl rounded-[2rem] w-full max-w-lg shadow-2xl border border-white p-6 sm:p-8 transform transition-all animate-in fade-in zoom-in-95 duration-300">
         
+        {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors"
+          className="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-100/50 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
 
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-[1.2rem] bg-indigo-50 flex items-center justify-center text-indigo-600 border border-indigo-100 shrink-0">
-             <Lock className="w-5 h-5" />
+        <div className="flex items-start gap-4 mb-6">
+          <div className="w-14 h-14 rounded-[1.2rem] bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0 shadow-sm">
+            <FileBadge className="w-7 h-7 text-slate-600" />
           </div>
           <div>
-            <h2 className="text-[18px] font-bold text-slate-800 leading-tight">{credential.title}</h2>
-            <p className="text-[13px] font-medium text-slate-500">{credential.issuer}</p>
+            <h2 className="text-[22px] font-bold text-slate-800 leading-tight mb-1 pr-8">{credential.title}</h2>
+            <span className="inline-flex px-2.5 py-1 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100/50 shadow-sm">
+              {credential.status}
+            </span>
           </div>
         </div>
+
+        <div className="space-y-4 mb-8">
+          <div className="bg-slate-50/50 rounded-2xl p-4 border border-slate-100">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Issuer</p>
+                <p className="text-[14px] font-semibold text-slate-800">{credential.issuer}</p>
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Domain</p>
+                <p className="text-[14px] font-semibold text-slate-800">{credential.domain}</p>
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Issued Date</p>
+                <p className="text-[14px] font-semibold text-slate-800">
+                  {new Date(credential.issuedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </p>
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Expiry Date</p>
+                <p className="text-[14px] font-semibold text-slate-800">
+                  {credential.expiryDate ? new Date(credential.expiryDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Never'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <button className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-slate-800 text-white hover:bg-slate-700 shadow-md transition-colors text-[13px] font-semibold">
+            <Share2 className="w-4 h-4" /> Share Credential
+          </button>
+          <button className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-sm transition-colors text-[13px] font-semibold">
+            <QrCode className="w-4 h-4" /> Generate QR
+          </button>
+        </div>
         
-        <div className="flex flex-col gap-4 mb-8">
-           <div className="bg-[#f4f7f9] p-4 rounded-2xl border border-slate-100 shadow-inner flex flex-col gap-3">
-              <div className="flex justify-between items-center">
-                 <span className="text-[12px] font-semibold text-slate-500 flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> Issued</span>
-                 <span className="text-[13px] font-bold text-slate-800">{credential.issuedDate}</span>
-              </div>
-              <div className="w-full h-px bg-slate-200/60" />
-              <div className="flex justify-between items-center">
-                 <span className="text-[12px] font-semibold text-slate-500 flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> Expiry</span>
-                 <span className="text-[13px] font-bold text-slate-800">{credential.expiryDate || 'Lifetime'}</span>
-              </div>
-              <div className="w-full h-px bg-slate-200/60" />
-              <div className="flex justify-between items-center">
-                 <span className="text-[12px] font-semibold text-slate-500 flex items-center gap-1.5"><ShieldCheck className="w-3.5 h-3.5" /> Status</span>
-                 <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${
-                    credential.status === 'Verified' ? "bg-emerald-50 text-emerald-600 border border-emerald-100" :
-                    credential.status === 'Expiring Soon' ? "bg-rose-50 text-rose-500 border border-rose-100" :
-                    "bg-blue-50 text-blue-600 border border-blue-100"
-                 }`}>
-                    {credential.status}
-                 </span>
-              </div>
-           </div>
-        </div>
-
-        <div className="mb-8 pl-1">
-           <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Linked Use Cases</h4>
-           <div className="flex flex-wrap gap-2">
-              {credential.useCases.map((uc, i) => (
-                 <span key={i} className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-semibold border border-slate-200/60">
-                    {uc}
-                 </span>
-              ))}
-           </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-           <button className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-[13px] font-bold transition-colors shadow-[0_2px_15px_-3px_rgba(79,70,229,0.3)]">
-             <Share2 className="w-4 h-4" /> Share Access
-           </button>
-           <button className="w-[52px] h-[52px] flex items-center justify-center rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors border border-slate-200/60 shrink-0">
-             <QrCode className="w-5 h-5" />
-           </button>
-        </div>
-
       </div>
     </div>
   );
