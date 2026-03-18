@@ -38,7 +38,7 @@ export default function ActivityPage() {
           Activity Log <Activity className="w-6 h-6 text-indigo-500" />
         </h1>
         <p className="text-[13px] font-[500] text-slate-500 max-w-xl">
-          Monitor all credential actions, access events, approvals, revocations, and verifications in a unified audit trail.
+          Monitor all credential actions, access events, approvals, revocations, and verifications.
         </p>
       </div>
 

@@ -7,12 +7,14 @@ import { dashboardData } from '../utils/mockData';
 import SuggestedCredentialsCard from '../components/dashboard/SuggestedCredentialsCard';
 import RecentActivityCard from '../components/dashboard/RecentActivityCard';
 import { dashboardService } from '../services/dashboardService';
+import { useAuth } from '../context/AuthContext';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +56,7 @@ export default function Dashboard() {
         
         {/* Title Block */}
         <div className="px-2">
-          <h1 className="text-[26px] font-[600] text-slate-800 tracking-tight leading-none mb-1.5">Digital Continuity</h1>
+          <h1 className="text-[26px] font-[600] text-slate-800 tracking-tight leading-none mb-1.5">MySetu</h1>
           <p className="text-[13px] font-[500] text-slate-500">Manage credentials, consent, and lifecycle events.</p>
         </div>
 
@@ -89,11 +91,11 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="relative z-10">
-            <h2 className="text-[20px] font-semibold text-slate-800 tracking-tight leading-tight mb-1">{profile.name}</h2>
-            <p className="text-[13px] font-medium text-slate-500 mb-4">{profile.role}</p>
+            <h2 className="text-[20px] font-semibold text-slate-800 tracking-tight leading-tight mb-1">sss123</h2>
+            <p className="text-[13px] font-medium text-slate-500 mb-4">{user?.role || "Member"}</p>
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100/50 text-slate-500 text-[11px] font-mono border border-slate-200/50 shadow-sm">
               <Lock className="w-3 h-3" />
-              {profile.did}
+              {user?.did || "did:mysetu:unknown"}
             </div>
           </div>
         </div>

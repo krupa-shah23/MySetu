@@ -1,102 +1,148 @@
 import React from 'react';
-import { Share2, CheckCircle2, AlertTriangle, ShieldAlert, Scan, Activity, ArrowRight, Building } from 'lucide-react';
+import { 
+  ShieldAlert, 
+  CheckCircle2, 
+  Share2, 
+  ScanLine, 
+  FileText, 
+  History,
+  Building2,
+  Clock,
+  ArrowRight
+} from 'lucide-react';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
-const formatTimeAgo = (dateString) => {
-  const diff = Date.now() - new Date(dateString).getTime();
-  const minutes = Math.floor(diff / 60000);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-};
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
 
-const getEventIcon = (type) => {
-  switch (type) {
-    case 'Shared': return <Share2 className="w-4 h-4 text-blue-500" />;
-    case 'Verified': return <CheckCircle2 className="w-4 h-4 text-emerald-500" />;
-    case 'Revoked': return <ShieldAlert className="w-4 h-4 text-rose-500" />;
-    case 'Requests': return <Activity className="w-4 h-4 text-amber-500" />;
-    case 'Scanned': return <Scan className="w-4 h-4 text-indigo-500" />;
-    default: return <Activity className="w-4 h-4 text-slate-500" />;
+function getEventIcon(eventType) {
+  switch (eventType) {
+    case 'Shared':
+      return <Share2 className="w-5 h-5 text-blue-500" />;
+    case 'Verified':
+      return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+    case 'Revoked':
+      return <ShieldAlert className="w-5 h-5 text-rose-500" />;
+    case 'Scanned':
+      return <ScanLine className="w-5 h-5 text-purple-500" />;
+    case 'Requests':
+      return <History className="w-5 h-5 text-amber-500" />;
+    case 'Added':
+      return <FileText className="w-5 h-5 text-indigo-500" />;
+    default:
+      return <History className="w-5 h-5 text-slate-500" />;
   }
-};
+}
 
-const getStatusBadge = (status) => {
-  if (status === 'Success') return 'bg-emerald-50 border-emerald-100 text-emerald-600';
-  if (status === 'Pending') return 'bg-amber-50 border-amber-100 text-amber-600';
-  return 'bg-slate-50 border-slate-100 text-slate-600';
-};
+function getEventColor(eventType) {
+  switch (eventType) {
+    case 'Shared': return "bg-blue-100/50 text-blue-700 ring-blue-500/20";
+    case 'Verified': return "bg-emerald-100/50 text-emerald-700 ring-emerald-500/20";
+    case 'Revoked': return "bg-rose-100/50 text-rose-700 ring-rose-500/20";
+    case 'Scanned': return "bg-purple-100/50 text-purple-700 ring-purple-500/20";
+    case 'Requests': return "bg-amber-100/50 text-amber-700 ring-amber-500/20";
+    case 'Added': return "bg-indigo-100/50 text-indigo-700 ring-indigo-500/20";
+    default: return "bg-slate-100 text-slate-700 ring-slate-500/20";
+  }
+}
+
+function getStatusBadge(status) {
+  switch (status) {
+    case 'Success':
+    case 'Approved':
+      return <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-700 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>{status}</span>;
+    case 'Active':
+      return <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-blue-100 text-blue-700 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>{status}</span>;
+    case 'Revoked':
+      return <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-rose-100 text-rose-700 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>{status}</span>;
+    case 'Pending':
+      return <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-100 text-amber-700 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>{status}</span>;
+    default:
+      return <span className="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-700 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>{status}</span>;
+  }
+}
+
+function formatTime(isoString) {
+  const date = new Date(isoString);
+  return new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(
+    Math.round((date.getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
+    'day'
+  );
+  // Alternatively simplify format for feed
+}
 
 export default function ActivityLogCard({ items }) {
   if (!items || items.length === 0) {
     return (
-      <div className="bg-white/60 backdrop-blur-2xl rounded-[2rem] p-8 border border-white/70 shadow-sm flex flex-col items-center justify-center min-h-[400px]">
-         <Activity className="w-12 h-12 text-slate-300 mb-4" />
-         <p className="text-[14px] font-semibold text-slate-500">No activity recorded for this filter.</p>
+      <div className="bg-white/40 backdrop-blur-xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-12 text-center text-slate-500">
+        No activity found for this filter.
       </div>
     );
   }
 
   return (
-    <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border border-white/70 shadow-[0_4px_30px_rgba(0,0,0,0.02)] overflow-hidden">
+    <div className="bg-white/60 backdrop-blur-xl rounded-[2.5rem] border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
       <div className="flex flex-col">
-        {items.map((item, idx) => (
-          <div 
-            key={item.id} 
-            className={`group flex items-start sm:items-center p-5 transition-colors duration-200 hover:bg-white/50 ${idx !== items.length - 1 ? 'border-b border-slate-100/50' : ''}`}
-          >
-            {/* Left Desktop Layout (Time & Icon) */}
-            <div className="hidden sm:flex items-center w-32 shrink-0 pr-4 border-r border-slate-100">
-              <span className="text-[11px] font-bold text-slate-400 font-mono tracking-tight drop-shadow-sm w-16 text-right mr-3">
-                {formatTimeAgo(item.timestamp)}
-              </span>
-              <div className="w-8 h-8 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center shrink-0">
-                {getEventIcon(item.eventType)}
+        {items.map((item, idx) => {
+          const isLast = idx === items.length - 1;
+          const displayTime = new Date(item.timestamp).toLocaleDateString() + ' • ' + new Date(item.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+          return (
+            <div 
+              key={item.id} 
+              className={cn(
+                "p-5 sm:p-6 hover:bg-white/40 transition-colors duration-200 group relative",
+                !isLast && "border-b border-slate-200/50"
+              )}
+            >
+              <div className="flex items-start gap-4">
+                {/* Icon Column */}
+                <div className="shrink-0 mt-1">
+                  <div className={cn(
+                    "w-11 h-11 rounded-2xl flex items-center justify-center shadow-sm ring-1 ring-inset",
+                    getEventColor(item.eventType)
+                  )}>
+                    {getEventIcon(item.eventType)}
+                  </div>
+                </div>
+
+                {/* Content Column */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-1">
+                    <div>
+                      <h4 className="text-[15px] font-[600] text-slate-800 tracking-tight flex items-center gap-2 flex-wrap">
+                        {item.title}
+                        {getStatusBadge(item.status)}
+                      </h4>
+                      <p className="text-[13.5px] text-slate-600 mt-1">
+                        {item.description}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center gap-1.5 text-slate-400 text-[12px] font-medium shrink-0 mt-1 sm:mt-0">
+                      <Clock className="w-3.5 h-3.5" />
+                      {displayTime}
+                    </div>
+                  </div>
+
+                  {/* Badges/Tags Row */}
+                  <div className="flex items-center gap-3 mt-3">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/50 border border-slate-200/60 shadow-sm text-slate-600 text-[12px] font-medium">
+                      <Building2 className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="truncate max-w-[120px]">{item.institution}</span>
+                    </div>
+                    <ArrowRight className="w-3 h-3 text-slate-300" />
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/50 border border-slate-200/60 shadow-sm text-slate-600 text-[12px] font-medium">
+                      <FileText className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="truncate max-w-[120px]">{item.credential}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* Mobile Left Column (Just Icon) */}
-            <div className="sm:hidden flex flex-col items-center mr-4">
-              <div className="w-8 h-8 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center shrink-0 mb-1">
-                {getEventIcon(item.eventType)}
-              </div>
-              <span className="text-[10px] font-bold text-slate-400 font-mono text-center">
-                {formatTimeAgo(item.timestamp)}
-              </span>
-            </div>
-
-            {/* Main Content Body */}
-            <div className="flex-1 min-w-0 sm:px-4">
-               <div className="flex items-center gap-2 mb-1">
-                 <h4 className="text-[14px] font-bold text-slate-800 leading-tight truncate">{item.title}</h4>
-               </div>
-               
-               <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mt-2">
-                 <span className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-600 bg-white/60 px-2 py-0.5 rounded border border-slate-100 shadow-sm">
-                   <Building className="w-3 h-3 text-slate-400" /> {item.institution}
-                 </span>
-                 <ArrowRight className="w-3 h-3 text-slate-300 hidden sm:block" />
-                 <span className="text-[12px] font-semibold text-slate-500 truncate max-w-[150px] sm:max-w-xs block">
-                   {item.credential}
-                 </span>
-               </div>
-
-               <p className="text-[12px] font-medium text-slate-400 mt-2 truncate w-full group-hover:text-slate-500 transition-colors">
-                 {item.description}
-               </p>
-            </div>
-
-            {/* Right Side Placements */}
-            <div className="ml-4 flex flex-col items-end shrink-0 gap-2">
-               <span className="px-2.5 py-1 rounded-lg text-[10px] uppercase tracking-widest font-bold bg-slate-100/50 text-slate-500 border border-slate-200/50 shadow-sm hidden sm:inline-block">
-                 {item.eventType}
-               </span>
-               <span className={`px-2 py-0.5 rounded-md text-[10px] uppercase font-bold border shadow-sm ${getStatusBadge(item.status)}`}>
-                 {item.status}
-               </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

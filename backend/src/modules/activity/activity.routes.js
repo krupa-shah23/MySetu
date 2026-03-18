@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('./activity.controller');
+const activityController = require('./activity.controller');
 
-router.get('/', controller.getActivities);
+// GET /api/activity
+router.get('/', activityController.getActivities);
 
 module.exports = router;
